@@ -63,9 +63,10 @@ model = None
 
 def init_stt(output_graph_path, lm_path, trie_path):
     global model
-    model = deepspeech.Model(output_graph_path, BEAM_WIDTH)
-    model.enableDecoderWithLM(lm_path, trie_path, LM_ALPHA, LM_BETA)
-    logging.debug('Process {}: Loaded models'.format(os.getpid()))
+    if model is None:
+        model = deepspeech.Model(output_graph_path, BEAM_WIDTH)
+        model.enableDecoderWithLM(lm_path, trie_path, LM_ALPHA, LM_BETA)
+        logging.debug('Process {}: Loaded models'.format(os.getpid()))
 
 
 def stt(sample):
