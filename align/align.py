@@ -499,10 +499,10 @@ def main():
 
             samples = list(progress(pre_filter(), desc='VAD splitting'))
 
-            pool = multiprocessing.Pool(initializer=init_stt,
+            with multiprocessing.Pool(initializer=init_stt,
                                         initargs=(output_graph_path, lm_path, trie_path),
-                                        processes=args.stt_workers)
-            transcripts = list(progress(pool.imap(stt, samples), desc='Transcribing', total=len(samples)))
+                                        processes=args.stt_workers) as pool:
+                transcripts = list(progress(pool.imap(stt, samples), desc='Transcribing', total=len(samples)))
 
             fragments = []
             for time_start, time_end, segment_transcript in transcripts:
